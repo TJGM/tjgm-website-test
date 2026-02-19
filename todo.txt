@@ -1,0 +1,27 @@
+Add comments to main index.md so I understand how to quickly update the news section and other sections.
+
+Completely finish mods section cards on home page and at least finish improved 2dfx page.
+
+Write out website layout standards. e.g. homepage is customised, standard pages should be as basic as possible except for comparison section.
+
+Optimize home page
+
+Clean up mkdocs.yml
+
+Before and after captions don't fit correctly if images are in spoiler
+
+Before and after captions and full screen button need to scale
+
+    Comparison verticle line goes over header when scrolling, need to fix
+
+Extend full screen button to all images
+
+    Fix logos in stripes
+
+Fix headers on homepage, some use ## and some use <h2></h2>
+
+Fix scaling at 4K (fixed I think, check ultrawide with Stephen)
+
+Change mod links to open in their own page
+
+    Update all images to .webp

@@ -1,0 +1,147 @@
+site_name: TJGM
+site_description: The best place for technical GTA guides, news, videos and more.
+site_url: https://tjgm.dev/
+
+nav:
+  - Home: index.md
+
+  - News:
+    - Index: news/index.md
+    - Tags: news/tags.md
+
+  - Mods:
+    - Improved 2DFX: mods/Improved-2DFX/index.md
+    - No Extra Air Resistance: mods/No-Extra-Air-Resistance/index.md
+    - Weapon Coronas: mods/Weapon-Coronas/index.md
+    - Orange Bulb Lampposts: mods/Orange-Bulb-Lampposts/index.md
+    - Jizzy's Pleasure Dome Remastered 2DFX: mods/Jizzy's-Pleasure-Dome-Remastered-2DFX/index.md
+    
+  - Guides:
+
+    - Grand Theft Auto IV:
+      - Fixing GTA IV with 4 Mods: guides/gtaiv/Fixing-GTA-IV-with-4-Mods/index.md
+      - Fusion Overloader Tutorial: guides/gtaiv/Fusion-Overloader-Tutorial/index.md
+
+    - Grand Theft Auto San Andreas:
+      - How to Downgrade EVERY Version of GTA San Andreas: guides/gtasa/How-to-Downgrade-EVERY-Version-of-GTA-San-Andreas/index.md
+      - Ultimate Modding Guide for GTA San Andreas: 
+        - Chapter 1 - Getting Started: guides/gtasa/Ultimate-Modding-Guide-for-GTA-San-Andreas/chapter1.md
+        - Chapter 2 - Installing Essentials: guides/gtasa/Ultimate-Modding-Guide-for-GTA-San-Andreas/chapter2.md
+        - Chapter 3 - Modloader Tutorial & Learning file Types: guides/gtasa/Ultimate-Modding-Guide-for-GTA-San-Andreas/chapter3.md
+        - Chapter 4 - Installing More Mods: guides/gtasa/Ultimate-Modding-Guide-for-GTA-San-Andreas/chapter4.md
+        - Chapter 5 - Diagnosing and Solving Crashes: guides/gtasa/Ultimate-Modding-Guide-for-GTA-San-Andreas/chapter5.md
+        - Chapter 6 - where to Find Mods and Pro Tips: guides/gtasa/Ultimate-Modding-Guide-for-GTA-San-Andreas/chapter6.md
+
+    - Grand Theft Auto Vice City:
+      - How to Downgrade EVERY Version of GTA Vice City: guides/gtavc/How-to-Downgrade-EVERY-Version-of-GTA-Vice-City/index.md
+      - Restoring the Vice City Radio without Downgrading: guides/gtavc/Restoring-the-Vice-City-Radio-without-Downgrading/index.md
+
+    - Grand Theft Auto III:
+        - How to Downgrade EVERY Version of GTA III: guides/gtaiii/How-to-Downgrade-EVERY-Version-of-GTA-III/index.md
+
+theme:
+  name: material
+  font:
+    text: Roboto
+    code: Roboto Mono
+  logo: assets/logo.webp
+  favicon: assets/favicon.ico
+
+  palette:
+    # Dark Mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Enable light mode
+      primary: black
+      accent: deep purple
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Enable dark mode
+      primary: black
+      accent: deep purple
+
+  features:
+  - navigation.top
+  - search.highlight
+  - search.suggest
+  - search.share
+  - content.code.annotate
+  - toc.follow
+
+plugins:
+  - search
+  - meta
+  - blog:
+      blog_dir: news
+      archive_date_format: yyyy
+      archive_url_date_format: yyyy
+      post_url_format: "{slug}"
+      categories_allowed:
+        - Announcements
+        - Mod Releases
+        - Mod Updates
+        - Roundups
+        - News
+
+  - tags:
+      tags_allowed:
+        - GTA V
+        - GTA IV
+        - GTA Vice City Stories
+        - GTA Liberty City Stories
+        - GTA San Andreas
+        - GTA Vice City
+        - GTA III
+        - GTA II
+        - GTA
+
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: "#"
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/tjgm.bsky.social
+      name: Bluesky
+
+    - icon: fontawesome/brands/patreon
+      link: https://www.patreon.com/TJGM
+      name: Patreon
+
+    - icon: fontawesome/brands/twitch
+      link: https://twitch.tv/tjgm
+      name: Twitch
+
+    - icon: fontawesome/brands/youtube
+      link: https://youtube.com/@TJGM
+      name: YouTube
+
+extra_css:
+  - stylesheets/maincolours.css
+  - stylesheets/hero.css
+  - stylesheets/cards.css
+  - stylesheets/compare-slider.css
+
+  
+extra_javascript:
+  - js/parallax.js
+  - js/compare-slider.js
+
+copyright: "Copyright © 2026 TJGM."
