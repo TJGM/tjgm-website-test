@@ -25,7 +25,7 @@ document.querySelectorAll('.compare-container').forEach(container => {
   function updateVisuals() {
     const rect = container.getBoundingClientRect();
 
-    // clip top image (flipped)
+    // clip top image
     topImage.style.clipPath = `inset(0 0 0 ${sliderPercent}%)`;
 
     // slider position
@@ -67,15 +67,15 @@ document.querySelectorAll('.compare-container').forEach(container => {
 
   // Listen for window resize to adjust vertical scaling only
   window.addEventListener('resize', () => {
-    updateVisuals(); // keep X (sliderPercent) the same
+    updateVisuals(); // keep sliderPercent the same
   });
 });
 
+// Fullscreen button logic
 document.querySelectorAll(".compare-container").forEach(container => {
-
   const btn = document.createElement("button");
   btn.className = "compare-fullscreen-btn";
-  btn.innerHTML = "⛶";
+  btn.textContent = "⛶";  // initial fullscreen icon
   container.appendChild(btn);
 
   let overlay = null;
@@ -93,9 +93,12 @@ document.querySelectorAll(".compare-container").forEach(container => {
 
     container.classList.add("is-fullscreen");
 
-    // --- FIX: update slider & vertical line immediately ---
-    const event = new Event('resize'); // trigger resize listeners
-    window.dispatchEvent(event);        // your existing listener will call updateVisuals()
+    // Swap button icon to X
+    btn.textContent = "✖";
+
+    // Update visuals immediately
+    const event = new Event('resize');
+    window.dispatchEvent(event);
   }
 
   function exit() {
@@ -107,10 +110,13 @@ document.querySelectorAll(".compare-container").forEach(container => {
 
     container.classList.remove("is-fullscreen");
 
+    // Swap button icon back to fullscreen
+    btn.textContent = "⛶";
+
     overlay = null;
     placeholder = null;
 
-    // --- FIX: update slider & vertical line after exit ---
+    // Update visuals after exit
     const event = new Event('resize');
     window.dispatchEvent(event);
   }
