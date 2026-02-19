@@ -1,4 +1,5 @@
 document.querySelectorAll('.compare-container').forEach(container => {
+
   const topImage = container.querySelector('.compare-top');
   const slider = container.querySelector('.compare-slider');
   const line = container.querySelector('.compare-line');
@@ -7,9 +8,12 @@ document.querySelectorAll('.compare-container').forEach(container => {
   const afterCaption  = container.querySelector('.compare-caption.after');
 
   let dragging = false;
+  let wasDragging = false;   // <-- important flag
+  let sliderPercent = 50;
 
-  // Store slider percentage (0–100) instead of absolute px
-  let sliderPercent = 50; // initialize in the middle
+  /* -------------------
+     Slider Position Logic
+  ------------------- */
 
   function setClip(offsetX) {
     const rect = container.getBoundingClientRect();
@@ -18,64 +22,100 @@ document.querySelectorAll('.compare-container').forEach(container => {
     offsetX = Math.max(0, Math.min(offsetX, rect.width));
 
     sliderPercent = (offsetX / rect.width) * 100;
-
     updateVisuals();
   }
 
   function updateVisuals() {
     const rect = container.getBoundingClientRect();
 
-    // clip top image
     topImage.style.clipPath = `inset(0 0 0 ${sliderPercent}%)`;
 
-    // slider position
     slider.style.left = sliderPercent + '%';
     slider.style.top = rect.height / 2 + 'px';
 
-    // vertical line
     line.style.left = sliderPercent + '%';
     line.style.height = rect.height + 'px';
 
-    // captions
     const fadeZone = 20;
     const beforeOpacity = Math.min(1, Math.max(0, sliderPercent / fadeZone));
-    const afterOpacity = Math.min(1, Math.max(0, (100 - sliderPercent) / fadeZone));
+    const afterOpacity  = Math.min(1, Math.max(0, (100 - sliderPercent) / fadeZone));
 
     if (beforeCaption) beforeCaption.style.opacity = beforeOpacity;
     if (afterCaption)  afterCaption.style.opacity  = afterOpacity;
   }
 
-  // Drag events
-  slider.addEventListener('mousedown', e => { dragging = true; e.preventDefault(); });
-  slider.addEventListener('touchstart', e => { dragging = true; e.preventDefault(); });
-  document.addEventListener('mouseup', () => dragging = false);
-  document.addEventListener('touchend', () => dragging = false);
-  document.addEventListener('mousemove', e => { if (dragging) setClip(e.clientX); });
-  document.addEventListener('touchmove', e => { if (dragging && e.touches[0]) setClip(e.touches[0].clientX); });
-  container.addEventListener('click', e => setClip(e.clientX));
+  /* -------------------
+     Drag Handling (FIXED)
+  ------------------- */
 
-  // Initialize after image loads
+  slider.addEventListener('mousedown', e => {
+    dragging = true;
+    wasDragging = false;
+    e.preventDefault();
+  });
+
+  slider.addEventListener('touchstart', e => {
+    dragging = true;
+    wasDragging = false;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    wasDragging = true;
+    setClip(e.clientX);
+  });
+
+  document.addEventListener('touchmove', e => {
+    if (!dragging || !e.touches[0]) return;
+    wasDragging = true;
+    setClip(e.touches[0].clientX);
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (dragging) {
+      // Let click event see that a drag occurred
+      setTimeout(() => { wasDragging = false; }, 0);
+    }
+    dragging = false;
+  });
+
+  document.addEventListener('touchend', () => {
+    if (dragging) {
+      setTimeout(() => { wasDragging = false; }, 0);
+    }
+    dragging = false;
+  });
+
+  container.addEventListener('click', e => {
+    if (wasDragging) return;
+    setClip(e.clientX);
+  });
+
+  /* -------------------
+     Init + Resize
+  ------------------- */
+
   const img = container.querySelector('img');
-  const init = () => {
-    updateVisuals(); // set initial positions
-  };
+
+  const init = () => updateVisuals();
+
   if (img.complete) {
     init();
   } else {
     img.onload = init;
   }
 
-  // Listen for window resize to adjust vertical scaling only
-  window.addEventListener('resize', () => {
-    updateVisuals(); // keep sliderPercent the same
-  });
-});
+  window.addEventListener('resize', updateVisuals);
 
-// Fullscreen button logic
-document.querySelectorAll(".compare-container").forEach(container => {
+
+  /* =========================
+     FULLSCREEN LOGIC
+  ========================= */
+
   const btn = document.createElement("button");
   btn.className = "compare-fullscreen-btn";
-  btn.textContent = "⛶";  // initial fullscreen icon
+  btn.textContent = "⛶";
   container.appendChild(btn);
 
   let overlay = null;
@@ -92,13 +132,9 @@ document.querySelectorAll(".compare-container").forEach(container => {
     document.body.appendChild(overlay);
 
     container.classList.add("is-fullscreen");
-
-    // Swap button icon to X
     btn.textContent = "✖";
 
-    // Update visuals immediately
-    const event = new Event('resize');
-    window.dispatchEvent(event);
+    window.dispatchEvent(new Event('resize'));
   }
 
   function exit() {
@@ -109,16 +145,12 @@ document.querySelectorAll(".compare-container").forEach(container => {
     overlay.remove();
 
     container.classList.remove("is-fullscreen");
-
-    // Swap button icon back to fullscreen
     btn.textContent = "⛶";
 
     overlay = null;
     placeholder = null;
 
-    // Update visuals after exit
-    const event = new Event('resize');
-    window.dispatchEvent(event);
+    window.dispatchEvent(new Event('resize'));
   }
 
   btn.addEventListener("click", e => {
@@ -128,10 +160,15 @@ document.querySelectorAll(".compare-container").forEach(container => {
 
   document.addEventListener("click", e => {
     if (!overlay) return;
-    if (e.target === overlay) exit();
+
+    // 🔥 FIX: ignore overlay click if it followed a drag
+    if (e.target === overlay && !wasDragging) {
+      exit();
+    }
   });
 
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") exit();
   });
+
 });
