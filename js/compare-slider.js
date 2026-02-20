@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Comparison sliders
   // =========================
   document.querySelectorAll('.compare-container').forEach(container => {
+
     const topImage = container.querySelector('.compare-top');
     if (!topImage) return; // skip normal images
 
@@ -123,26 +124,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   // 2. Fullscreen for normal images
   // =========================
+  const path = window.location.pathname;
 
-  // Normalize path to remove base URL
-  const baseUrl = document.body.dataset.baseUrl || '/';
-  let path = window.location.pathname;
-  if (baseUrl !== '/' && path.startsWith(baseUrl)) {
-    path = path.slice(baseUrl.length - 1); // keep leading '/'
-  }
+  // Exclude homepage, news index, archive, and category paths
+  if (
+    path !== '/' &&
+    path !== '/news/' &&
+    !path.startsWith('/news/archive/') &&
+    !path.startsWith('/news/category/')
+  ) {
 
-  // Excluded prefixes
-  const excludedPrefixes = [
-    '/',                // homepage
-    '/news/',           // news index
-    '/news/archive/',   // archive pages
-    '/news/category/'   // category pages
-  ];
-
-  // Only skip **normal images** if page is excluded
-  const skipNormalImages = excludedPrefixes.some(prefix => path === prefix || path.startsWith(prefix));
-
-  if (!skipNormalImages) {
     document.querySelectorAll(".md-content img").forEach(img => {
       if (img.closest(".compare-container")) return;
 
@@ -205,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.addEventListener("click", e => { if (!overlay) return; if (e.target === overlay) exit(); });
       document.addEventListener("keydown", e => { if (e.key === "Escape") exit(); });
     });
+
   }
 
 });
