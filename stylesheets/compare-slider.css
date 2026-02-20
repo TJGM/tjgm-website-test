@@ -81,7 +81,7 @@
   color: white;
 
   /* Responsive scaling */
-  font-size: clamp(0.7rem, 2.5vw, 1rem);
+  font-size: clamp(0.55rem, 2vw, 1rem);
 
   border-radius: 4px;
   pointer-events: none;
@@ -96,6 +96,14 @@
 
 .compare-caption.before { left: 10px; }
 .compare-caption.after  { right: 10px; }
+
+/* Extra mobile tuning */
+@media (max-width: 600px) {
+  .compare-caption {
+    font-size: clamp(0.45rem, 3vw, 0.75rem);
+    max-width: 55%;
+  }
+}
 
 /* -------------------
    Fullscreen overlay
@@ -112,10 +120,7 @@
 
 /* -------------------
    FULLSCREEN MODE
-   (Actual cropping fix)
 ------------------- */
-
-/* Stop inline-block shrink behavior */
 .compare-container.is-fullscreen {
   display: block;
   position: relative;
@@ -123,7 +128,7 @@
   max-width: 95vw;
   max-height: 95vh;
 
-  overflow: hidden; /* still required for slider clipping */
+  overflow: hidden;
 }
 
 /* Bottom image */
@@ -135,7 +140,7 @@
   height: auto;
 }
 
-/* Top wrapper must perfectly match bottom image */
+/* Top wrapper */
 .compare-container.is-fullscreen .compare-top {
   position: absolute;
   inset: 0;
@@ -151,9 +156,9 @@
   height: auto;
 }
 
-/* Bigger captions in fullscreen (responsive instead of fixed 2.6em) */
+/* Fullscreen captions (responsive scaling) */
 .compare-container.is-fullscreen .compare-caption {
-  font-size: clamp(1.2rem, 4vw, 2.6rem);
+  font-size: clamp(1rem, 4vw, 2.6rem);
   padding: 6px 10px;
 }
 
