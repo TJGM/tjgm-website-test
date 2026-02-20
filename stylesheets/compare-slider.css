@@ -71,7 +71,7 @@
 }
 
 /* -------------------
-   Captions
+   Captions (Improved Scaling)
 ------------------- */
 .compare-caption {
   position: absolute;
@@ -79,11 +79,19 @@
   padding: 4px 8px;
   background: rgba(0,0,0,0.6);
   color: white;
-  font-size: 1em;
+
+  /* Responsive scaling */
+  font-size: clamp(0.7rem, 2.5vw, 1rem);
+
   border-radius: 4px;
   pointer-events: none;
   user-select: none;
   transition: opacity 0.25s ease, font-size 0.2s ease;
+
+  /* Prevent long captions from dominating */
+  max-width: 45%;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .compare-caption.before { left: 10px; }
@@ -143,9 +151,9 @@
   height: auto;
 }
 
-/* Bigger captions in fullscreen */
+/* Bigger captions in fullscreen (responsive instead of fixed 2.6em) */
 .compare-container.is-fullscreen .compare-caption {
-  font-size: 2.6em;
+  font-size: clamp(1.2rem, 4vw, 2.6rem);
   padding: 6px 10px;
 }
 
@@ -175,9 +183,9 @@
   pointer-events: auto;
 }
 
-/* Bigger button in fullscreen */
+/* Bigger button in fullscreen (responsive) */
 .compare-container.is-fullscreen .compare-fullscreen-btn {
-  font-size: 2.2em;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
   padding: 0.5em 0.8em;
 }
 
