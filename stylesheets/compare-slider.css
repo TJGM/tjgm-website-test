@@ -77,7 +77,6 @@
   background: rgba(0,0,0,0.6);
   color: white;
 
-  /* Strong mobile-friendly scaling */
   font-size: clamp(0.45rem, 1.8vw, 1rem);
 
   border-radius: 4px;
@@ -122,18 +121,21 @@
   position: relative;
 
   max-width: 95vw;
-  max-height: 95vh;
+  max-height: calc(var(--vh, 1vh) * 95); /* <-- dynamic vh fix */
   overflow: hidden;
 
-  /* Shared fullscreen UI scale */
   --fs-ui-size: clamp(0.8rem, 1.2vw, 1.4rem);
+
+  /* Safe-area padding for iOS devices */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Bottom image */
 .compare-container.is-fullscreen > img {
   display: block;
   max-width: 95vw;
-  max-height: 95vh;
+  max-height: calc(var(--vh, 1vh) * 95);
   width: auto;
   height: auto;
 }
@@ -147,7 +149,7 @@
 /* Top image */
 .compare-container.is-fullscreen .compare-top img {
   max-width: 95vw;
-  max-height: 95vh;
+  max-height: calc(var(--vh, 1vh) * 95);
   width: auto;
   height: auto;
 }
