@@ -124,79 +124,86 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   // 2. Fullscreen for normal images
   // =========================
-  const path = window.location.pathname;
 
-  // Exclude homepage, news index, archive, and category paths
-  if (
-    path !== '/' &&
-    path !== '/news/' &&
-    !path.startsWith('/news/archive/') &&
-    !path.startsWith('/news/category/')
-  ) {
-
-    document.querySelectorAll(".md-content img").forEach(img => {
-      if (img.closest(".compare-container")) return;
-
-      const container = document.createElement("div");
-      container.className = "compare-container fullscreen-only";
-      img.parentNode.insertBefore(container, img);
-      container.appendChild(img);
-
-      container.style.cursor = 'default';
-
-      const btn = document.createElement("button");
-      btn.className = "compare-fullscreen-btn";
-      btn.textContent = "⛶";
-      container.appendChild(btn);
-
-      let overlay = null;
-      let placeholder = null;
-      function preventScroll(e) { e.preventDefault(); }
-
-      function enter() {
-        overlay = document.createElement("div");
-        overlay.className = "compare-overlay";
-
-        placeholder = document.createElement("div");
-        container.parentNode.insertBefore(placeholder, container);
-
-        overlay.appendChild(container);
-        document.body.appendChild(overlay);
-
-        container.classList.add("is-fullscreen");
-        btn.textContent = "✖";
-
-        document.body.style.overflow = "hidden";
-        document.addEventListener("touchmove", preventScroll, { passive: false });
-        document.addEventListener("wheel", preventScroll, { passive: false });
-
-        window.dispatchEvent(new Event('resize'));
-      }
-
-      function exit() {
-        if (!overlay) return;
-        placeholder.parentNode.insertBefore(container, placeholder);
-        placeholder.remove();
-        overlay.remove();
-
-        container.classList.remove("is-fullscreen");
-        btn.textContent = "⛶";
-
-        document.body.style.overflow = "";
-        document.removeEventListener("touchmove", preventScroll);
-        document.removeEventListener("wheel", preventScroll);
-
-        overlay = null;
-        placeholder = null;
-
-        window.dispatchEvent(new Event('resize'));
-      }
-
-      btn.addEventListener("click", e => { e.stopPropagation(); overlay ? exit() : enter(); });
-      document.addEventListener("click", e => { if (!overlay) return; if (e.target === overlay) exit(); });
-      document.addEventListener("keydown", e => { if (e.key === "Escape") exit(); });
-    });
-
+  // Normalize path to remove base URL (for GitHub Pages / subfolders)
+  const baseUrl = document.body.dataset.baseUrl || '/';
+  let path = window.location.pathname;
+  if (baseUrl !== '/' && path.startsWith(baseUrl)) {
+    path = path.slice(baseUrl.length - 1); // keep leading '/'
   }
+
+  // Excluded prefixes
+  const excludedPrefixes = [
+    '/',                // homepage
+    '/news/',           // news index
+    '/news/archive/',   // archive pages
+    '/news/category/'   // category pages
+  ];
+
+  const isExcluded = excludedPrefixes.some(prefix => path === prefix || path.startsWith(prefix));
+  if (isExcluded) return;
+
+  document.querySelectorAll(".md-content img").forEach(img => {
+    if (img.closest(".compare-container")) return;
+
+    const container = document.createElement("div");
+    container.className = "compare-container fullscreen-only";
+    img.parentNode.insertBefore(container, img);
+    container.appendChild(img);
+
+    container.style.cursor = 'default';
+
+    const btn = document.createElement("button");
+    btn.className = "compare-fullscreen-btn";
+    btn.textContent = "⛶";
+    container.appendChild(btn);
+
+    let overlay = null;
+    let placeholder = null;
+    function preventScroll(e) { e.preventDefault(); }
+
+    function enter() {
+      overlay = document.createElement("div");
+      overlay.className = "compare-overlay";
+
+      placeholder = document.createElement("div");
+      container.parentNode.insertBefore(placeholder, container);
+
+      overlay.appendChild(container);
+      document.body.appendChild(overlay);
+
+      container.classList.add("is-fullscreen");
+      btn.textContent = "✖";
+
+      document.body.style.overflow = "hidden";
+      document.addEventListener("touchmove", preventScroll, { passive: false });
+      document.addEventListener("wheel", preventScroll, { passive: false });
+
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    function exit() {
+      if (!overlay) return;
+      placeholder.parentNode.insertBefore(container, placeholder);
+      placeholder.remove();
+      overlay.remove();
+
+      container.classList.remove("is-fullscreen");
+      btn.textContent = "⛶";
+
+      document.body.style.overflow = "";
+      document.removeEventListener("touchmove", preventScroll);
+      document.removeEventListener("wheel", preventScroll);
+
+      overlay = null;
+      placeholder = null;
+
+      window.dispatchEvent(new Event('resize'));
+    }
+
+    btn.addEventListener("click", e => { e.stopPropagation(); overlay ? exit() : enter(); });
+    document.addEventListener("click", e => { if (!overlay) return; if (e.target === overlay) exit(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") exit(); });
+  });
 
 });
