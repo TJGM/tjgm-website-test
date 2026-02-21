@@ -165,7 +165,7 @@
   box-shadow: none;
 }
 
-/* Dark gray button */
+/* Dark gray button - keep color on hover/focus/active */
 .hero-buttons-vertical .hero-btn-dark {
   background-color: #2c2c2c;
   color: white;
@@ -175,11 +175,13 @@
 .hero-buttons-vertical .hero-btn-dark:focus,
 .hero-buttons-vertical .hero-btn-dark:focus-visible,
 .hero-buttons-vertical .hero-btn-dark:active {
+  background-color: #2c2c2c; /* lock dark color */
+  color: white;              /* lock text */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Patreon button */
+/* Patreon button - stay the same colour at all times */
 .hero-buttons-vertical .hero-btn-accent {
   background-color: #f96854;
   color: white;
@@ -190,12 +192,14 @@
 .hero-buttons-vertical .hero-btn-accent:focus,
 .hero-buttons-vertical .hero-btn-accent:focus-visible,
 .hero-buttons-vertical .hero-btn-accent:active {
+  background-color: #f96854; /* never changes */
+  color: white;              /* never changes */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(249, 104, 84, 0.5);
 }
 
 /* =========================
-   Mobile Layout (Corrected)
+   Mobile Layout (Controlled Shrinking)
    ========================= */
 @media (max-width: 900px) {
 
